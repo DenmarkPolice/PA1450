@@ -1,13 +1,4 @@
-﻿Stationsnamn;Klimatnummer;Mäthöjd (meter över marken)
-Karlskrona-Söderstjerna Mo;65090;2.0
-
-Parameternamn;Beskrivning;Enhet
-Lufttemperatur;momentanvärde, 1 gång/tim;degree celsius
-
-Tidsperiod (fr.o.m);Tidsperiod (t.o.m);Höjd (meter över havet);Latitud (decimalgrader);Longitud (decimalgrader)
-2010-03-01 00:00:00;2020-05-04 07:00:00;2.0;56.1498;15.5921
-
-Datum;Tid (UTC);Lufttemperatur;Kvalitet;;Tidsutsnitt:
+﻿Datum;Tid (UTC);Lufttemperatur;Kvalitet;;Tidsutsnitt:
 2010-03-01;00:00:00;2.0;G;;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
 2010-03-01;01:00:00;2.2;Y;;Tidsperiod (fr.o.m.) = 2010-03-01 00:00:00 (UTC)
 2010-03-01;02:00:00;2.2;Y;;Tidsperiod (t.o.m.) = 2020-02-01 06:00:00 (UTC)

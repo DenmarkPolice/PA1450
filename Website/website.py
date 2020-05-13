@@ -15,19 +15,24 @@ website.layout = html.Div(children = [
             html.A("Link2"),
             html.A("Link3")
         ])
-    ])
+    ]),
 
-
-
-
+    dcc.Dropdown(
+        id='dropdown2',
+        options=[
+            {'label': i, 'value' : i} for i in ['KSD', 'KNA', 'GTB']],
+            value = 'KSD'
+    ),
+    html.Div(id='dd-output-container'),
+    html.Br()
 ])
 
 
-
-
-
-
-
+# @app.callback(
+#     dash.dependencies.Output('dd-output-container', 'children'),
+#     [dash.dependencies.Input('dropdown2', 'value')])
+# def update_output(value):
+#     return 'You have selected "{}"'.format(value)
 
 
 if __name__ == '__main__':

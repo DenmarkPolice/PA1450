@@ -1,15 +1,15 @@
-﻿Datum;Tid (UTC);Solskenstid;Kvalitet;;Tidsutsnitt:
-2009-07-01;00:00:00;0;G;;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
-2009-07-01;01:00:00;0;G;;Tidsperiod (fr.o.m.) = 2009-07-01 00:00:00 (UTC)
-2009-07-01;02:00:00;0;G;;Tidsperiod (t.o.m.) = 2020-02-01 06:00:00 (UTC)
-2009-07-01;03:00:00;0;G;;Samplingstid = 1 timme
-2009-07-01;04:00:00;0;G;;
-2009-07-01;05:00:00;0;G;;Kvalitetskoderna:
-2009-07-01;06:00:00;885;G;;Grön (G) = Kontrollerade och godkända värden.
-2009-07-01;07:00:00;3548;G;;Gul (Y) = Misstänkta eller aggregerade värden. Grovt kontrollerade arkivdata och okontrollerade realtidsdata (senaste 2 tim).
-2009-07-01;08:00:00;3600;G;;
-2009-07-01;09:00:00;3600;G;;Orsaker till saknade data:
-2009-07-01;10:00:00;3600;G;;  stationen eller givaren har varit ur funktion.
+﻿ID;Datum;Tid (UTC);Solskenstid;Kvalitet;Tidsutsnitt
+2009-07-01;00:00:00;0;G;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
+2009-07-01;01:00:00;0;G;Tidsperiod (fr.o.m.) = 2009-07-01 00:00:00 (UTC)
+2009-07-01;02:00:00;0;G;Tidsperiod (t.o.m.) = 2020-02-01 06:00:00 (UTC)
+2009-07-01;03:00:00;0;G;Samplingstid = 1 timme
+2009-07-01;04:00:00;0;G;
+2009-07-01;05:00:00;0;G;Kvalitetskoderna:
+2009-07-01;06:00:00;885;G;Grön (G) = Kontrollerade och godkända värden.
+2009-07-01;07:00:00;3548;G;Gul (Y) = Misstänkta eller aggregerade värden. Grovt kontrollerade arkivdata och okontrollerade realtidsdata (senaste 2 tim).
+2009-07-01;08:00:00;3600;G;
+2009-07-01;09:00:00;3600;G;Orsaker till saknade data:
+2009-07-01;10:00:00;3600;G;  stationen eller givaren har varit ur funktion.
 2009-07-01;11:00:00;3600;G
 2009-07-01;12:00:00;3600;G
 2009-07-01;13:00:00;3600;G

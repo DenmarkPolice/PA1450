@@ -10,3 +10,6 @@ __pycache__
 
 # Ignore the data directory (default for output of downloaded data)
 /data
+
+**/.vs
+**/.vscode

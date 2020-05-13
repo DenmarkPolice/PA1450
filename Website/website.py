@@ -11,9 +11,9 @@ website.layout = html.Div(children = [
     html.Div(className = "dropdown", children = [
         html.Button("Dropdown", className = "dropbtn"),
         html.Div(className = "dropdown-content", children = [
-            html.A("Link1"),
-            html.A("Link2"),
-            html.A("Link3")
+            html.P("Soltimmar"),
+            html.P("Nederbörd"),
+            html.P("Temperatur")
         ])
     ])
 

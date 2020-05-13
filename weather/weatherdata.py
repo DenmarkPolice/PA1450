@@ -1,25 +1,19 @@
-import pandas as import pd
+import pandas as pd
 import os
 
-global filelist = []
-global globalDf = pd.DataFrame()
+def readFiles():
+    df_list = []
 
-for file in os.listdir(".\Datasets"):
-    if file.endswith(".csv")
-        filelist.append(file)
-
-def create_globalDf():
-    for i in filelist:
+    for file in os.listdir(os.getcwd()):
+        if file.endswith(".csv"):
+            df_list.append(pd.read_csv(file))
         
-    
+    return df_list
 
-
-import pandas as pd
-
-# Get data - reading the CSV file
-import mpu.pd
-df = mpu.pd.example_df()
-
-# Convert
-lists = [[row[col] for col in df.columns] for row in df.to_dict('records')]
-
+def merge_dataFrame_list(dataFrame_list):
+    df_collection = pd.DataFrame()
+    for df in dataFrame_list:
+        if (df_collection.empty() == True):
+            df_collection.append(df)
+        else:
+            pd.merge(df_collection, df)

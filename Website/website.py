@@ -2,22 +2,16 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from app import app
+from datetime import datetime as dt
+import re
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 website = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 website.layout = html.Div(children = [
-    html.Div(className = "dropdown", children = [
-        html.Button("Dropdown", className = "dropbtn"),
-        html.Div(className = "dropdown-content", children = [
-            html.P("Soltimmar"),
-            html.P("Nederbörd"),
-            html.P("Temperatur")
-        ])
-    ]),
-    html.Label('Välj en stad'),
+    html.Label('Paremeter'),
     dcc.Dropdown(
         id='dropdown2',
         options=[
@@ -26,11 +20,24 @@ website.layout = html.Div(children = [
             multi=True,
     ),
     html.Div(id='dd-output-container'),
-    html.Br()
+    html.Br(),
+
+     dcc.DatePickerRange(
+        id='my-date-picker-range',
+        min_date_allowed=dt(2009, 7, 1),
+        max_date_allowed=dt(2020, 2, 1),
+        initial_visible_month=dt(2020, 1, 1),
+        end_date=dt(2020, 2, 1).date()
+    ),
+    html.Div(id='output-container-date-picker-range')
+
+
+
+
 ])
 
 
-@app.callback(
+@website.callback(
     dash.dependencies.Output('dd-output-container', 'children'),
     [dash.dependencies.Input('dropdown2', 'value')])
 def update_output(value):

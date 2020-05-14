@@ -41,9 +41,10 @@ app.layout = html.Div(children=[
     dcc.DatePickerRange(
         id='date-pick-range',
         min_date_allowed=dt(2009, 8, 5),
-        max_date_allowed=dt(2020, 2, 1),
+        max_date_allowed=dt.now(),
         initial_visible_month=dt(2019, 11, 11),
-        display_format='DD/MM/YYYY'
+        display_format='DD/MM/YYYY',
+        clearable=True,
     ),
     html.Div(id='output-date-range'),
     html.Br(),
@@ -96,7 +97,7 @@ app.layout = html.Div(children=[
     dash.dependencies.Output('year-dropdown-output', 'children'),
     [dash.dependencies.Input('year-dropdown', 'value')])
 def update_output(value):
-    return 'You have selected the entire year {}'.format(value)
+    return 'You have selected the entire year of {}'.format(value)
 
 
 #Callback for date range picker
@@ -119,6 +120,7 @@ def update_output(start_date, end_date):
     else:
         return string_prefix
 
+#Callback for the modal window
 @app.callback(
     Output("modal", "is_open"),
     [Input("open", "n_clicks"), Input("close", "n_clicks")],

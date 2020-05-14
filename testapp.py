@@ -33,7 +33,7 @@ app.layout = html.Div(children=[
     ),
     html.Br(),
 
-    dcc.Dropdown(id='year-dropdown',options=[{'label':x, 'value': x} for x in range(2009, 2020)], placeholder='If you want to select an entire year, please do so here'),
+    dcc.Dropdown(id='year-dropdown',options=[{'label':x, 'value': x} for x in range(2009, 2021)], placeholder='If you want to select an entire year, please do so here'),
     html.Div(id='year-dropdown-output'),
     html.Br(),
 
@@ -92,9 +92,22 @@ app.layout = html.Div(children=[
         ),
 ])
 
+
+#Callback that disables the date range picker if a year is selected in the drodown menu.
+@app.callback(dash.dependencies.Output('date-pick-range', 'disabled'), [dash.dependencies.Input('year-dropdown', 'value')])
+def date_range_set_enabled_state(value):
+    if value is not None:
+        return True
+
+@app.callback(dash.dependencies.Output('year-dropdown', 'disabled'), [dash.dependencies.Input('date-pick-range', 'start_date'), 
+dash.dependencies.Input('date-pick-range', 'end_date')])
+def year_dropdown_set_enabled_state(start_date, end_date):
+    if start_date is not None and end_date is not None:
+        return True
+
+
 #Callback for the dropdown menu that displays years.
-@app.callback(
-    dash.dependencies.Output('year-dropdown-output', 'children'),
+@app.callback(dash.dependencies.Output('year-dropdown-output', 'children'),
     [dash.dependencies.Input('year-dropdown', 'value')])
 def update_output(value):
     return 'You have selected the entire year of {}'.format(value)

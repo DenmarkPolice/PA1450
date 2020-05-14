@@ -12,7 +12,7 @@ import base64
 import pandas as pd
 import os
 from weatherdata import weatherdata
-
+import plotly.express as px
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -24,6 +24,8 @@ data_frames = data.get_ranged_df("2015-05-01", "2015-05-02")
 attributes = []
 for data_frame in data_frames:
     attributes.append(data_frame.columns[2])
+
+fig = px.line(data_frames[0], x = data_frames[0].columns[1], y = data_frames[0].columns[2])
 
 
 
@@ -46,13 +48,13 @@ app.layout = html.Div(children=[
     html.Div(id='year-dropdown-output'),
     html.Br(),
 
-    html.Div('''If you would rather want to display the data between two dates, please choose those dates here'''),
+    html.Div('''If you would rather want to display the data between two dates, please enter those dates here'''),
     dcc.DatePickerRange(
         id='date-pick-range',
         min_date_allowed=dt(2009, 8, 5),
         max_date_allowed=dt.now(),
-        initial_visible_month=dt(2019, 11, 11),
-        display_format='DD/MM/YYYY',
+        initial_visible_month=dt.now(),
+        display_format='DD-MM-YYYY',
         clearable=True,
     ),
     html.Div(id='output-date-range'),
@@ -77,10 +79,16 @@ app.layout = html.Div(children=[
         # Allow multiple files to be uploaded
         multiple=True
     ),
-
+    html.Div(id='disabled-info'),
     html.Div(id='output-data-upload'),
 
-        dbc.Button("How to format your own csv-file", id="open"),
+    dcc.Graph(
+        id='scatter-chart',
+        figure = fig      
+    ),
+    
+
+    dbc.Button("How to format your own csv-file", id="open"),
         dbc.Modal(
             [
                 dbc.ModalHeader("How to upload your own csv-file"),
@@ -101,6 +109,15 @@ app.layout = html.Div(children=[
         ),
 ])
 
+#NOT WORKING
+@app.callback(dash.dependencies.Output('scatter-chart', 'figure'), [dash.dependencies.Input('date-pick-range', 'start_date'), 
+dash.dependencies.Input('date-pick-range', 'end_date')])
+def update_graf(start_date, end_date):
+    print(str(start_date))
+    data_frames = data.get_ranged_df(str(start_date), str(end_date))
+    fig = px.line(data_frames[0], x = data_frames[0].columns[1], y = data_frames[0].columns[2])
+    return fig
+    
 
 #Callback that disables the date range picker if a year is selected in the drodown menu.
 @app.callback(dash.dependencies.Output('date-pick-range', 'disabled'), [dash.dependencies.Input('year-dropdown', 'value')])
@@ -120,7 +137,8 @@ def year_dropdown_set_enabled_state(start_date, end_date):
 @app.callback(dash.dependencies.Output('year-dropdown-output', 'children'),
     [dash.dependencies.Input('year-dropdown', 'value')])
 def update_year_output(value):
-    return 'You have selected the entire year of {}'.format(value)
+    if value is not None:
+        return 'You have selected the entire year of {}'.format(value)
 
 
 #Callback for date range picker

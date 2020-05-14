@@ -24,7 +24,7 @@ frameNames = []
 for df in dataframes:
     frameNames.append(df.columns[2])
 
-fig = px.line(dataframes[0], x = dataframes[0].columns[1], y = dataframes[0].columns[2])
+fig = px.line(dataframes[0], x = dataframes[0].columns[0], y = dataframes[0].columns[2])
 
 
 
@@ -52,20 +52,7 @@ website.layout = html.Div(children = [
     html.Div(id='output-container-date-picker-range'),
     dcc.Graph(
         id='scatter-chart',
-        figure = fig
-        #{'data' : [
-           # go.Scatter(
-             #   y = dataframes[0][dataframes[0].columns[2]],
-            #    x = dataframes[0][dataframes[0].columns[0]], 
-           #     mode = 'markers'
-         #   )
-      #  ],
-    #    'layout' : go.Layout(
-        #    title = 'Scatterplot',
-         #   yaxis = {'title' : dataframes[0].columns[2]},
-         #   xaxis = {'title' : dataframes[0].columns[0]}
-        #)
-        #}
+        figure = fig      
     )
 
 ])
@@ -77,6 +64,12 @@ website.layout = html.Div(children = [
 #def update_output(value):
 #    return 'You have selected "{}"'.format(value)
 
+@website.callback(dash.dependencies.Output('scatter-chart', 'figure'), [dash.dependencies.Input('my-date-picker-range', 'start_date'),
+ dash.dependencies.Input('my-date-picker-range', 'end_date')])
+def date_range_set_enabled_state(start_date, end_date):
+    dataframes = data.get_ranged_df(start_date, end_date)
+    fig = px.line(dataframes[0], x = dataframes[0].columns[0], y = dataframes[0].columns[2])
+    return fig
 
 
 if __name__ == '__main__':

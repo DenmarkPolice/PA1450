@@ -5,11 +5,10 @@ import glob
 class weatherdata:
 
     def __init__(self):
-        self.data_frame
+        self.data_frame = []
 
     def import_to_dataset(self, filePath):
         all_files = glob.glob(filePath + "/*.csv")
-
         df_list = []
 
         for filename in all_files:
@@ -21,7 +20,6 @@ class weatherdata:
         return self.data_frame
 
 data = weatherdata()
-
 
 filePath = os.getcwd() + "\\weatherModule\\rawData"
 print(filePath)

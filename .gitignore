@@ -13,3 +13,7 @@ __pycache__
 
 **/.vs
 **/.vscode
+Datasets/base_dataframe.csv
+Datasets/base_dataframe.csv
+Datasets/Solskenstid.csv
+weather/weatherdata.py

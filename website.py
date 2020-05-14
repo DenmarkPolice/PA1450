@@ -62,15 +62,15 @@ website.layout = html.Div(children = [
         id='scatter-chart',
         figure = {'data' : [
             go.Scatter(
-                y = dataframes[0].Lufttemperatur,
-                x = dataframes[0].Datum, 
+                y = dataframes[0][dataframes[0].columns[2]],
+                x = dataframes[0][dataframes[0].columns[0]], 
                 mode = 'markers'
             )
         ],
         'layout' : go.Layout(
             title = 'Scatterplot',
-            xaxis = {'title' : 'Test'},
-            yaxis = {'title' : 'Test2'}
+            yaxis = {'title' : dataframes[0].columns[2]},
+            xaxis = {'title' : dataframes[0].columns[0]}
         )
         }
     )

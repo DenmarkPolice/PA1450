@@ -32,17 +32,18 @@ data.import_to_data()
 dataframes = data.get_data_frames()
 
 for df in dataframes:
-    for label in df.columns:
-        print(label + "\n")
+    print(df.columns[2] + "\n")
 
-
+dataNames = []
+for df in dataframes:
+    dataNames.append(df.columns[2])
 
 website.layout = html.Div(children = [
     html.Label('Parameter'),
     dcc.Dropdown(
         id='dropdown2',
         options=[
-            {'label': i, 'value' : i} for i in ['KSD', 'KNA', 'GTB']],
+            {'label': i, 'value' : i} for i in dataNames],
             value = 'KSD',
             multi=True,
     ),

@@ -4,11 +4,17 @@ import dash_core_components as dcc
 import dash_html_components as html
 from datetime import datetime as dt
 import re
+import plotly.graph_objs as go
+import numpy as np
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 website = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+np.random.seed(50)
+x_rand = np.random.randint(1,61,60)
+y_rand = np.random.randint(1,61,60)
 
 website.layout = html.Div(children = [
     html.Label('Paremeter'),
@@ -29,10 +35,23 @@ website.layout = html.Div(children = [
         initial_visible_month=dt(2020, 1, 1),
         end_date=dt(2020, 2, 1).date()
     ),
-    html.Div(id='output-container-date-picker-range')
-
-
-
+    html.Div(id='output-container-date-picker-range'),
+    dcc.Graph(
+        id='scatter-chart',
+        figure = {'data' : [
+            go.Scatter(
+                x = x_rand,
+                y = y_rand, 
+                mode = 'markers'
+            )
+        ],
+        'layout' : go.Layout(
+            title = 'Scatterplot',
+            xaxis = {'title' : 'Test'},
+            yaxis = {'title' : 'Test2'}
+        )
+        }
+    )
 
 ])
 

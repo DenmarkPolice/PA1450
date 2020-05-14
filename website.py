@@ -20,10 +20,10 @@ y_rand = np.random.randint(1,61,60)
 
 
 df = pd.DataFrame()
-df = pd.read_csv("./Alberts_fina_testmapp/Solskenstid.csv", sep = ";", nrows=1)
+df = pd.read_csv("./weatherModule/rawData/Lufttemperatur.csv", sep = ",", nrows=10)
 
 cols = df.columns
-print(cols)
+print(df)
 
 
 

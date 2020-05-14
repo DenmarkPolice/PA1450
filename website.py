@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import glob as glob
 import os
-import weatherdata.py
+from weatherdata import weatherdata
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -21,25 +21,30 @@ y_rand = np.random.randint(1,61,60)
 
 
 
-df = pd.DataFrame()
-df = pd.read_csv("./weatherModule/rawData/Lufttemperatur.csv", sep = ",", nrows=10)
-
-cols = df.columns
-#print(cols)
-
-for label in cols:
-    print(label + "\n")
 
 
 
+
+data = weatherdata(os.getcwd() + "\\rawData")
+data.import_to_data()
+
+
+dataframes = data.get_data_frames()
+
+for df in dataframes:
+    print(df.columns[2] + "\n")
+
+dataNames = []
+for df in dataframes:
+    dataNames.append(df.columns[2])
 
 website.layout = html.Div(children = [
     html.Label('Parameter'),
     dcc.Dropdown(
         id='dropdown2',
         options=[
-            {'label': i, 'value' : i} for i in ['KSD', 'KNA', 'GTB']],
-            value = 'KSD',
+            {'label': i, 'value' : i} for i in dataNames],
+            value = dataNames[0],
             multi=True,
     ),
     html.Div(id='dd-output-container'),
@@ -57,8 +62,8 @@ website.layout = html.Div(children = [
         id='scatter-chart',
         figure = {'data' : [
             go.Scatter(
-                x = x_rand,
-                y = y_rand, 
+                y = dataframes[0].Lufttemperatur,
+                x = dataframes[0].Datum, 
                 mode = 'markers'
             )
         ],

@@ -30,7 +30,7 @@ class weatherdata:
 data = weatherdata()
 
 
-filePath = os.getcwd() + "\\weatherModule\\rawData"
+filePath = os.getcwd() + "\\rawData"
 print(filePath)
 data.import_to_dataset(filePath)
 

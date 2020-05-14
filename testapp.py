@@ -10,9 +10,22 @@ import dash_table
 import io
 import base64
 import pandas as pd
+import os
+from weatherdata import weatherdata
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+data = weatherdata(os.getcwd() + "\\rawData")
+data.import_data()
+data_frames = data.get_ranged_df("2015-05-01", "2015-05-02")
+
+#Find all of the attributes to place in the first dropdown
+attributes = []
+for data_frame in data_frames:
+    attributes.append(data_frame.columns[2])
+
+
 
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -20,14 +33,10 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(children=[
     html.H1(children='Historical weather data provided by SMHI'),
 
-
+    #Attribute dropdown
     dcc.Dropdown(
         id='Multi-dropdown',
-        options=[
-            {'label': 'Temperatur', 'value': 'TEMP'},
-            {'label': 'Nederbörd', 'value': 'NED'},
-            {'label': 'Solskenstid', 'value': 'SOL'},
-        ],
+        options=[{'label':atr, 'value':atr} for atr in attributes],
         placeholder='Pick attributes',
         multi=True
     ),

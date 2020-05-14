@@ -14,12 +14,12 @@ class weatherdata:
 
         for filename in all_files:
             df_list.append(pd.read_csv(filename, sep = ";"))
+            
 
         for df in df_list:
             print(df.info())
             print (df.head())
-            del df[df.columns[4]]
-            del df[df.columns[5]]
+            df.drop(columns = ["Tidsutsnitt", "Kvalitet"])
             
 
         self.data_frame = df_list
@@ -30,7 +30,7 @@ class weatherdata:
 data = weatherdata()
 
 
-filePath = os.getcwd() + "\\weatherModule\\rawData"
+filePath = os.getcwd() + "\\rawData"
 print(filePath)
 data.import_to_dataset(filePath)
 

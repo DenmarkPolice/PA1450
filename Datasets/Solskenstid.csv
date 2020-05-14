@@ -1,12 +1,4 @@
-﻿Stationsnamn;Klimatnummer;Mäthöjd (meter över marken)
-Karlskrona Sol;65075;2.0
-
-Parameternamn;Beskrivning;Enhet
-Solskenstid;summa 1 timme, 1 gång/tim;second
-
-Tidsperiod (fr.o.m);Tidsperiod (t.o.m);Höjd (meter över havet);Latitud (decimalgrader);Longitud (decimalgrader)
-2009-07-01 00:00:00;2020-05-04 08:00:00;10.0;56.1091;15.5870
-
+﻿
 Datum;Tid (UTC);Solskenstid;Kvalitet;;Tidsutsnitt:
 2009-07-01;00:00:00;0;G;;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
 2009-07-01;01:00:00;0;G;;Tidsperiod (fr.o.m.) = 2009-07-01 00:00:00 (UTC)

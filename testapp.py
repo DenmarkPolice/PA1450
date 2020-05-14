@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import dash
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 from datetime import datetime as dt
 from dash.dependencies import Input, Output, State
@@ -66,7 +67,28 @@ app.layout = html.Div(children=[
         # Allow multiple files to be uploaded
         multiple=True
     ),
+
     html.Div(id='output-data-upload'),
+
+        dbc.Button("How to format your own csv-file", id="open"),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("How to upload your own csv-file"),
+                dbc.ModalBody('If you would like to use your own csv-file to display data it has to be formatted in the right way.'),
+                dbc.ModalBody('The format that is used on this website is as follows:'),
+                dbc.ModalBody(''),
+                dbc.ModalBody('Datum,Tid (UTC),xyz'),
+                dbc.ModalBody(''),
+                dbc.ModalBody('Where xyz stands for the attribute of the csv-file, for example temperature.'),
+                dbc.ModalBody(''),
+                dbc.ModalBody('Once you have made sure that your csv-file is formatted this way, please use the box above to upload your file.'),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close", className="ml-auto")
+                ),
+            ],
+            id="modal",
+            size="sm"
+        ),
 ])
 
 #Callback for the dropdown menu that displays years.
@@ -97,6 +119,16 @@ def update_output(start_date, end_date):
     else:
         return string_prefix
 
+@app.callback(
+    Output("modal", "is_open"),
+    [Input("open", "n_clicks"), Input("close", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
 #Parses the contents of the uploaded csv file
 def parse_contents(contents, filename, date):
     content_type, content_string = contents.split(',')
@@ -112,7 +144,7 @@ def parse_contents(contents, filename, date):
         return html.Div([
             'There was an error processing this file.'
         ])
-
+    #Assuming that this Div creates the table that is displayed
     return html.Div([
         html.H5(filename),
         html.H6(dt.fromtimestamp(date)),
@@ -143,6 +175,7 @@ def update_output(list_of_contents, list_of_names, list_of_dates):
             parse_contents(c, n, d) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -44,7 +44,7 @@ website.layout = html.Div(children = [
         id='dropdown2',
         options=[
             {'label': i, 'value' : i} for i in dataNames],
-            value = 'KSD',
+            value = dataNames[0],
             multi=True,
     ),
     html.Div(id='dd-output-container'),
@@ -62,8 +62,8 @@ website.layout = html.Div(children = [
         id='scatter-chart',
         figure = {'data' : [
             go.Scatter(
-                x = x_rand,
-                y = y_rand, 
+                y = dataframes[0].Lufttemperatur,
+                x = dataframes[0].Datum, 
                 mode = 'markers'
             )
         ],

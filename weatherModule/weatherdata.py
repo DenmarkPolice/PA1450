@@ -4,35 +4,19 @@ import glob
 
 class weatherdata:
 
-    def __init__(self):
-        self.data_frame = pd.DataFrame()
+    def __init__(self, filePath):
+        self.data_frame_list = []
+        self.filePath = filePath
 
-    def import_to_dataset(self, filePath):
-        all_files = glob.glob(filePath + "/*.csv")
+    def import_to_data(self):
+        all_files = glob.glob(self.filePath + "/*.csv")
 
         df_list = []
 
         for filename in all_files:
-            df_list.append(pd.read_csv(filename, sep = ";"))
-            
-
-        for df in df_list:
-            print(df.info())
-            print (df.head())
-            df.drop(columns = ["Tidsutsnitt", "Kvalitet"])
-            
+            df_list.append(pd.read_csv(filename, sep = ","))            
 
         self.data_frame = df_list
 
-    def get_dataset(self):
+    def get_data_frames(self):
         return self.data_frame
-
-data = weatherdata()
-
-
-filePath = os.getcwd() + "\\rawData"
-print(filePath)
-data.import_to_dataset(filePath)
-
-
-print(data.get_dataset())

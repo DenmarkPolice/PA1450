@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from datetime import datetime as dt
 from dash.dependencies import Input, Output, State
+import re
 import dash_table
 import io
 import base64
@@ -30,7 +31,12 @@ app.layout = html.Div(children=[
         multi=True
     ),
     html.Br(),
- 
+
+    dcc.Dropdown(id='year-dropdown',options=[{'label':x, 'value': x} for x in range(2009, 2020)], placeholder='If you want to select an entire year, please do so here'),
+    html.Div(id='year-dropdown-output'),
+    html.Br(),
+
+    html.Div('''If you would rather want to display the data between two dates, please choose those dates here'''),
     dcc.DatePickerRange(
         id='date-pick-range',
         min_date_allowed=dt(2009, 8, 5),
@@ -39,6 +45,7 @@ app.layout = html.Div(children=[
         display_format='DD/MM/YYYY'
     ),
     html.Div(id='output-date-range'),
+    html.Br(),
 
     dcc.Upload(
         id='upload-data',
@@ -62,6 +69,15 @@ app.layout = html.Div(children=[
     html.Div(id='output-data-upload'),
 ])
 
+#Callback for the dropdown menu that displays years.
+@app.callback(
+    dash.dependencies.Output('year-dropdown-output', 'children'),
+    [dash.dependencies.Input('year-dropdown', 'value')])
+def update_output(value):
+    return 'You have selected the entire year {}'.format(value)
+
+
+#Callback for date range picker
 @app.callback(
     dash.dependencies.Output('output-date-range', 'children'),
     [dash.dependencies.Input('date-pick-range', 'start_date'),
@@ -81,6 +97,7 @@ def update_output(start_date, end_date):
     else:
         return string_prefix
 
+#Parses the contents of the uploaded csv file
 def parse_contents(contents, filename, date):
     content_type, content_string = contents.split(',')
 
@@ -115,6 +132,7 @@ def parse_contents(contents, filename, date):
         })
     ])
 
+#Displays the table generated for the uploaded csv file.
 @app.callback(Output('output-data-upload', 'children'),
               [Input('upload-data', 'contents')],
               [State('upload-data', 'filename'),

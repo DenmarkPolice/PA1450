@@ -7,7 +7,9 @@ import re
 import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
-
+import glob as glob
+import os
+import weatherdata.py
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -23,13 +25,16 @@ df = pd.DataFrame()
 df = pd.read_csv("./weatherModule/rawData/Lufttemperatur.csv", sep = ",", nrows=10)
 
 cols = df.columns
-print(df)
+#print(cols)
+
+for label in cols:
+    print(label + "\n")
 
 
 
 
 website.layout = html.Div(children = [
-    html.Label('Paremeter'),
+    html.Label('Parameter'),
     dcc.Dropdown(
         id='dropdown2',
         options=[

@@ -8,7 +8,7 @@ class weatherdata:
         self.data_frame_list = []
         self.filePath = filePath
 
-    def import_to_data(self):
+    def import_data(self):
         all_files = glob.glob(self.filePath + "/*.csv")
 
         df_list = []
@@ -16,7 +16,16 @@ class weatherdata:
         for filename in all_files:
             df_list.append(pd.read_csv(filename, sep = ","))            
 
-        self.data_frame = df_list
+        self.data_frame_list = df_list
 
-    def get_data_frames(self):
-        return self.data_frame
+    def get_ranged_df(self, start_date, end_date):
+        if start_date <= end_date:
+            ranged_df_list = []
+
+            for df in self.data_frame_list:
+                mask = (df['Datum'] > start_date) & (df['Datum'] <= end_date)
+                ranged_df_list.append(df.loc[mask])
+            
+            return ranged_df_list
+        else:
+            return "start_date must be smaller than end_date"

@@ -6,6 +6,7 @@ from datetime import datetime as dt
 import re
 import plotly.graph_objs as go
 import numpy as np
+import pandas as pd
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -15,6 +16,17 @@ website = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 np.random.seed(50)
 x_rand = np.random.randint(1,61,60)
 y_rand = np.random.randint(1,61,60)
+
+
+
+df = pd.DataFrame()
+df = pd.read_csv("./Alberts_fina_testmapp/Solskenstid.csv", sep = ";", nrows=1)
+
+cols = df.columns
+print(cols)
+
+
+
 
 website.layout = html.Div(children = [
     html.Label('Paremeter'),

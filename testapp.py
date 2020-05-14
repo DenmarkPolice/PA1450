@@ -38,7 +38,7 @@ app.layout = html.Div(children=[
         id='Multi-dropdown',
         options=[{'label':atr, 'value':atr} for atr in attributes],
         placeholder='Pick attributes',
-        multi=True
+        multi=False
     ),
     html.Br(),
 
@@ -108,6 +108,7 @@ def date_range_set_enabled_state(value):
     if value is not None:
         return True
 
+#Callback that disables the year dropdown if a date range is selected. 
 @app.callback(dash.dependencies.Output('year-dropdown', 'disabled'), [dash.dependencies.Input('date-pick-range', 'start_date'), 
 dash.dependencies.Input('date-pick-range', 'end_date')])
 def year_dropdown_set_enabled_state(start_date, end_date):
@@ -118,7 +119,7 @@ def year_dropdown_set_enabled_state(start_date, end_date):
 #Callback for the dropdown menu that displays years.
 @app.callback(dash.dependencies.Output('year-dropdown-output', 'children'),
     [dash.dependencies.Input('year-dropdown', 'value')])
-def update_output(value):
+def update_year_output(value):
     return 'You have selected the entire year of {}'.format(value)
 
 
@@ -127,7 +128,7 @@ def update_output(value):
     dash.dependencies.Output('output-date-range', 'children'),
     [dash.dependencies.Input('date-pick-range', 'start_date'),
      dash.dependencies.Input('date-pick-range', 'end_date')])
-def update_output(start_date, end_date):
+def update_date_range_output(start_date, end_date):
     string_prefix = 'You have selected: '
     if start_date is not None:
         start_date = dt.strptime(re.split('T| ', start_date)[0], '%Y-%m-%d')

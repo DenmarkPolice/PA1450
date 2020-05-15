@@ -14,19 +14,6 @@ from weatherdata import weatherdata
 import plotly.express as px
 
 
-def generateGraph(dataframe):
-    #Returns a px fig for the graph
-
-    date_and_time = []
-    for i in range(len(dataframe[dataframe.columns[0]])):
-        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
-
-    dictionary = {}
-
-    dictionary[dataframe.columns[0]] = date_and_time
-    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
-
-    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -44,7 +31,7 @@ for data_frame in data_frames:
 
 
 
-fig = generateGraph(data_frames[1])
+fig = {'data' : []}
 
 app.layout = html.Div(children=[
     html.H1(children='Historical weather data provided by SMHI'),
@@ -84,6 +71,21 @@ app.layout = html.Div(children=[
         figure = fig      
     ),
 ])
+
+
+def generateGraph(dataframe):
+    #Returns a px fig for the graph
+
+    date_and_time = []
+    for i in range(len(dataframe[dataframe.columns[0]])):
+        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
+
+    dictionary = {}
+
+    dictionary[dataframe.columns[0]] = date_and_time
+    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+
+    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
 #Displays the graph based on the attribute selected in the dropdown. 
 @app.callback([dash.dependencies.Output('scatter-chart', 'figure'), dash.dependencies.Output('fig-error', 'children')], [dash.dependencies.Input('date-pick-range', 'start_date'), 

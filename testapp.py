@@ -16,8 +16,10 @@ import plotly.express as px
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+#Get the data
 data = weatherdata(os.getcwd() + "\\rawData")
 data.import_data()
+#Random dates just so that we can get to the attributes. 
 data_frames = data.get_ranged_df("2015-05-01", "2015-05-02")
 
 #Find all of the attributes to place in the first dropdown
@@ -25,7 +27,7 @@ attributes = []
 for data_frame in data_frames:
     attributes.append(data_frame.columns[2])
 
-fig = px.line(data_frames[0], x = data_frames[0].columns[1], y = data_frames[0].columns[2])
+fig = px.line(data_frames[0], x = data_frames[0].columns[1], y = data_frames[0].columns[2]) #Might be removed in the future. 
 
 
 
@@ -37,7 +39,7 @@ app.layout = html.Div(children=[
 
     #Attribute dropdown
     dcc.Dropdown(
-        id='Multi-dropdown',
+        id='attribute-dropdown',
         options=[{'label':atr, 'value':atr} for atr in attributes],
         placeholder='Pick attributes',
         multi=False
@@ -60,6 +62,13 @@ app.layout = html.Div(children=[
     html.Div(id='output-date-range'),
     html.Br(),
 
+    html.Div(id='output-data-upload'),
+    html.Div(id='fig-error'),
+    dcc.Graph(
+        id='scatter-chart',
+        figure = fig      
+    ),
+    
     dcc.Upload(
         id='upload-data',
         children=html.Div([
@@ -79,14 +88,6 @@ app.layout = html.Div(children=[
         # Allow multiple files to be uploaded
         multiple=True
     ),
-    html.Div(id='disabled-info'),
-    html.Div(id='output-data-upload'),
-
-    dcc.Graph(
-        id='scatter-chart',
-        figure = fig      
-    ),
-    
 
     dbc.Button("How to format your own csv-file", id="open"),
         dbc.Modal(
@@ -109,14 +110,31 @@ app.layout = html.Div(children=[
         ),
 ])
 
-#NOT WORKING
-@app.callback(dash.dependencies.Output('scatter-chart', 'figure'), [dash.dependencies.Input('date-pick-range', 'start_date'), 
-dash.dependencies.Input('date-pick-range', 'end_date')])
-def update_graf(start_date, end_date):
+#
+@app.callback([dash.dependencies.Output('scatter-chart', 'figure'), dash.dependencies.Output('fig-error', 'children')], [dash.dependencies.Input('date-pick-range', 'start_date'), 
+dash.dependencies.Input('date-pick-range', 'end_date'), dash.dependencies.Input('attribute-dropdown', 'value')])
+def update_graf(start_date, end_date, value):
     print(str(start_date))
-    data_frames = data.get_ranged_df(str(start_date), str(end_date))
-    fig = px.line(data_frames[0], x = data_frames[0].columns[1], y = data_frames[0].columns[2])
-    return fig
+    #Checks so that all of the function parameters are not null, only then a graph can be made. 
+    if (start_date is not None and end_date is not None and value is not None):
+        #This gets us all of the data frames concerning the given dates
+        data_frames = data.get_ranged_df(str(start_date), str(end_date))
+
+        #Find which attribute is selected by the user
+        counter = 0
+        for data_frame in data_frames:
+            if data_frame.columns[2] == value: 
+                break #Right graph found, break out. 
+            counter += 1 #Otherwise increment counter and keep looking. 
+
+        
+        fig = px.line(data_frames[counter], x = data_frames[counter].columns[1], y = data_frames[counter].columns[2]) #Make the graph
+        text = "" #text is only for errors, but since it is an output we have to return something
+        return fig, text
+    else:
+        #If all of the parameters are not null, we can't create a graph, so we return an empty graph and an error message. 
+        return {'data': []}, "Please choose both an attribute and a date"
+    
     
 
 #Callback that disables the date range picker if a year is selected in the drodown menu.

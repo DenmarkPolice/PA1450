@@ -18,13 +18,24 @@ website = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 data = weatherdata(os.getcwd() + "\\rawData")
 data.import_data()
-dataframes = data.get_ranged_df("2015-05-01", "2015-05-02")
+dataframes = data.get_ranged_df("2015-05-01", "2015-05-05")
 
 frameNames = []
 for df in dataframes:
     frameNames.append(df.columns[2])
 
-fig = px.line(dataframes[0], x = dataframes[0].columns[0], y = dataframes[0].columns[2])
+date_and_time = []
+
+for i in range(len(dataframes[0][dataframes[0].columns[0]])):
+    date_and_time.append(dataframes[0].iat[i,0] + " " + dataframes[0].iat[i,1])
+ 
+
+dictionary = {}
+
+dictionary["Tid"] = date_and_time
+dictionary[dataframes[0].columns[2]] = dataframes[0][dataframes[0].columns[2]]
+
+fig = px.line(dictionary, x = 'Tid', y = dataframes[0].columns[2])
 
 
 
@@ -57,18 +68,24 @@ website.layout = html.Div(children = [
 
 ])
 
-
-#@website.callback(
-#   dash.dependencies.Output('dd-output-div', 'figure'),
-#    [dash.dependencies.Input('dropdown2', 'value')])
-#def update_output(value):
-#    return 'You have selected "{}"'.format(value)
-
 @website.callback(dash.dependencies.Output('scatter-chart', 'figure'), [dash.dependencies.Input('my-date-picker-range', 'start_date'),
  dash.dependencies.Input('my-date-picker-range', 'end_date')])
 def date_range_set_enabled_state(start_date, end_date):
     dataframes = data.get_ranged_df(start_date, end_date)
-    fig = px.line(dataframes[0], x = dataframes[0].columns[0], y = dataframes[0].columns[2])
+
+    
+    date_and_time = []
+
+    for i in range(len(dataframes[0][dataframes[0].columns[0]])):
+        date_and_time.append(dataframes[0].iat[i,0] + " " + dataframes[0].iat[i,1])
+    
+
+    dictionary = {}
+
+    dictionary["Tid"] = date_and_time
+    dictionary[dataframes[0].columns[2]] = dataframes[0][dataframes[0].columns[2]]
+    
+    fig = px.line(dictionary, x = 'Tid', y = dataframes[0].columns[2])
     return fig
 
 

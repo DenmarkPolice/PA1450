@@ -13,6 +13,21 @@ import os
 from weatherdata import weatherdata
 import plotly.express as px
 
+
+def generateGraph(dataframe):
+    #Returns a px fig for the graph
+
+    date_and_time = []
+    for i in range(len(dataframe[dataframe.columns[0]])):
+        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
+
+    dictionary = {}
+
+    dictionary[dataframe.columns[0]] = date_and_time
+    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+
+    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
@@ -27,24 +42,9 @@ attributes = []
 for data_frame in data_frames:
     attributes.append(data_frame.columns[2])
 
-def formatData(dataframe):
-    #Generates a dictionary with correct date and time with the weather data
-    date_and_time = []
-    for i in range(len(dataframe[dataframe.columns[0]])):
-        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
-
-    dictionary = {}
-
-    dictionary[dataframe.columns[0]] = date_and_time
-    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
-    return dictionary
-
-def generateGraph(dataframe, dictionary):
-    #Returns a px fig for the graph
-    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
 
-fig = {'data': []}
+fig = generateGraph(data_frames[1])
 
 app.layout = html.Div(children=[
     html.H1(children='Historical weather data provided by SMHI'),
@@ -109,7 +109,9 @@ def update_graf(start_date, end_date, atr_value, year_value):
             break #Right graph found, break out. 
         frame_num += 1 #Otherwise increment counter and keep looking.     
 
-    fig = px.line(data_frames[frame_num], x = data_frames[frame_num].columns[1], y = data_frames[frame_num].columns[2]) #Make the graph
+    fig = generateGraph(data_frames[frame_num])
+
+    #fig = px.line(data_frames[frame_num], x = data_frames[frame_num].columns[1], y = data_frames[frame_num].columns[2]) #Make the graph
     text = "" #text is only for errors, but since it is an output we have to return something
     return fig, text
 

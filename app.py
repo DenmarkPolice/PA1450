@@ -44,7 +44,7 @@ for data_frame in data_frames:
 
 
 
-fig = {'data': []}
+fig = generateGraph(data_frames[1])
 
 app.layout = html.Div(children=[
     html.H1(children='Historical weather data provided by SMHI'),

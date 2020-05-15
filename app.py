@@ -74,7 +74,7 @@ app.layout = html.Div(children=[
 
 
 def generateGraph(dataframe):
-    #Returns a px fig for the graph
+    '''Returns a px fig for the graph'''
 
     date_and_time = []
     for i in range(len(dataframe[dataframe.columns[0]])):

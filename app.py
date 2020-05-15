@@ -27,6 +27,23 @@ attributes = []
 for data_frame in data_frames:
     attributes.append(data_frame.columns[2])
 
+def formatData(dataframe):
+    #Generates a dictionary with correct date and time with the weather data
+    date_and_time = []
+    for i in range(len(dataframe[dataframe.columns[0]])):
+        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
+
+    dictionary = {}
+
+    dictionary[dataframe.columns[0]] = date_and_time
+    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+    return dictionary
+
+def generateGraph(dataframe, dictionary):
+    #Returns a px fig for the graph
+    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
+
+
 fig = {'data': []}
 
 app.layout = html.Div(children=[

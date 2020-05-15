@@ -33,9 +33,11 @@ def formatData(dataframe):
 
     dictionary[dataframe.columns[0]] = date_and_time
     dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+    return dictionary
 
 def generateGraph(dataframe, dictionary):
-    fig = px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
+    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
+    
 
 
 datetimedict = formatData(dataframes[0])
@@ -76,19 +78,8 @@ def date_range_set_enabled_state(start_date, end_date):
     dataframes = data.get_ranged_df(start_date, end_date)
 
     
-    date_and_time = []
-
-    for i in range(len(dataframes[0][dataframes[0].columns[0]])):
-        date_and_time.append(dataframes[0].iat[i,0] + " " + dataframes[0].iat[i,1])
     
-
-    dictionary = {}
-
-    dictionary["Tid"] = date_and_time
-    dictionary[dataframes[0].columns[2]] = dataframes[0][dataframes[0].columns[2]]
-    
-    fig = px.line(dictionary, x = 'Tid', y = dataframes[0].columns[2])
-    return fig
+    return generateGraph(dataframes[0], formatData(dataframes[0]))
 
 
 if __name__ == '__main__':

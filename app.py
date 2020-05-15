@@ -47,12 +47,12 @@ app.layout = html.Div(children=[
     html.Br(),
 
     #Pick an interval between two dates. 
-    html.Div('''If you would rather want to display the data between two dates, please enter those dates here'''),
+    html.Div('If you would rather want to display the data between two dates, please enter those dates here'),
     dcc.DatePickerRange(
         id='date-pick-range',
         min_date_allowed=dt(2009, 8, 5),
-        max_date_allowed=dt.now(),
-        initial_visible_month=dt.now(),
+        max_date_allowed=dt(2020, 2, 1),
+        initial_visible_month=dt(2020, 1, 1),
         display_format='DD-MM-YYYY',
         clearable=True,
     ),
@@ -72,6 +72,7 @@ app.layout = html.Div(children=[
 @app.callback([dash.dependencies.Output('scatter-chart', 'figure'), dash.dependencies.Output('fig-error', 'children')], [dash.dependencies.Input('date-pick-range', 'start_date'), 
 dash.dependencies.Input('date-pick-range', 'end_date'), dash.dependencies.Input('attribute-dropdown', 'value'), dash.dependencies.Input('year-dropdown', 'value')])
 def update_graf(start_date, end_date, atr_value, year_value):
+    '''Updates the graph based on attributes and/or dates'''
 
     #Find out whether the user has chosen an interval or an entire year
     if atr_value is not None and start_date is not None and end_date is not None:
@@ -94,12 +95,12 @@ def update_graf(start_date, end_date, atr_value, year_value):
     fig = px.line(data_frames[frame_num], x = data_frames[frame_num].columns[1], y = data_frames[frame_num].columns[2]) #Make the graph
     text = "" #text is only for errors, but since it is an output we have to return something
     return fig, text
-    
-
 
 #Callback that disables the date range picker if a year is selected in the drodown menu.
 @app.callback(dash.dependencies.Output('date-pick-range', 'disabled'), [dash.dependencies.Input('year-dropdown', 'value')])
 def date_range_set_enabled_state(value):
+    '''Disables the date range picker if a year is selected in the dropdown'''
+
     if value is not None:
         return True
 
@@ -107,16 +108,10 @@ def date_range_set_enabled_state(value):
 @app.callback(dash.dependencies.Output('year-dropdown', 'disabled'), [dash.dependencies.Input('date-pick-range', 'start_date'), 
 dash.dependencies.Input('date-pick-range', 'end_date')])
 def year_dropdown_set_enabled_state(start_date, end_date):
+    '''Disables the dropdown menu to select a year if a date interval is selected'''
+
     if start_date is not None and end_date is not None:
         return True
-
-
-#Callback for the dropdown menu that displays years.
-@app.callback(dash.dependencies.Output('year-dropdown-output', 'children'),
-    [dash.dependencies.Input('year-dropdown', 'value')])
-def update_year_output(value):
-    if value is not None:
-        return 'You have selected the entire year of {}'.format(value)
 
 
 if __name__ == '__main__':

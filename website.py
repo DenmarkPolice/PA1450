@@ -24,20 +24,22 @@ frameNames = []
 for df in dataframes:
     frameNames.append(df.columns[2])
 
-date_and_time = []
+def formatData(dataframe):
+    date_and_time = []
+    for i in range(len(dataframe[dataframe.columns[0]])):
+        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
 
-for i in range(len(dataframes[0][dataframes[0].columns[0]])):
-    date_and_time.append(dataframes[0].iat[i,0] + " " + dataframes[0].iat[i,1])
- 
+    dictionary = {}
 
-dictionary = {}
+    dictionary[dataframe.columns[0]] = date_and_time
+    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
 
-dictionary["Tid"] = date_and_time
-dictionary[dataframes[0].columns[2]] = dataframes[0][dataframes[0].columns[2]]
-
-fig = px.line(dictionary, x = 'Tid', y = dataframes[0].columns[2])
+def generateGraph(dataframe, dictionary):
+    fig = px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
 
+datetimedict = formatData(dataframes[0])
+fig = generateGraph(dataframes[0], datetimedict)
 
 
 

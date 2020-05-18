@@ -87,6 +87,17 @@ def generateGraph(dataframe):
 
     return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
+#Testing function for correctly formatting csv files
+
+
+
+#correctDF = CorrectifyDataframe(pd.read_csv("Lufttemperatur_noformat.csv"))
+
+def CorrectifyDataframe(dataframe):
+    print(dataframe)
+    newFrameDict = dict()
+    
+
 #Displays the graph based on the attribute selected in the dropdown. 
 @app.callback([dash.dependencies.Output('scatter-chart', 'figure'), dash.dependencies.Output('fig-error', 'children')], [dash.dependencies.Input('date-pick-range', 'start_date'), 
 dash.dependencies.Input('date-pick-range', 'end_date'), dash.dependencies.Input('attribute-dropdown', 'value'), dash.dependencies.Input('year-dropdown', 'value')])

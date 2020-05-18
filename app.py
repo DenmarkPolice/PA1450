@@ -14,7 +14,11 @@ import os
 from weatherdata import weatherdata
 import plotly.express as px
 
-
+def CorrectifyDataframe(dataframe):
+    newFrameDict = {dataframe.columns[0] : dataframe[dataframe.columns[0]], dataframe.columns[1] : dataframe[dataframe.columns[1]], dataframe.columns[2] : dataframe[dataframe.columns[2]]}
+    dataframe = pd.DataFrame(newFrameDict)
+    print(dataframe)
+    return dataframe
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -88,6 +92,15 @@ def generateGraph(dataframe):
 
     #return go.Scatter(dictionary, x = dataframe.columns[0], y = dataframe.columns[2], mode='lines')
     return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2],)
+
+#Testing function for correctly formatting csv files
+
+
+
+correctDF = CorrectifyDataframe(pd.read_csv("Nederbordsmang_noformat.csv", skiprows = 9, sep = ';'))
+
+
+    
 
 #Displays the graph based on the attribute selected in the dropdown. 
 # @app.callback([dash.dependencies.Output('scatter-chart', 'figure'), dash.dependencies.Output('fig-error', 'children')], [dash.dependencies.Input('date-pick-range', 'start_date'), 

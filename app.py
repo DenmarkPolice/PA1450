@@ -129,7 +129,13 @@ def generateGraph(dataframes):
             date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
         dictionary = {}
         dictionary[dataframe.columns[0]] = date_and_time
-        dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+        listan = []
+        if dataframe.columns[2] == 'Solskenstid':
+            for i in dataframe[dataframe.columns[2]]:
+                listan.append(i/60)
+            dictionary[dataframe.columns[2]] = listan
+        else:
+            dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
         
         fig.add_trace(go.Scatter(x=dictionary[dataframe.columns[0]], y = dictionary[dataframe.columns[2]], mode='lines', name= dataframe.columns[2]))
     fig.update_layout(title ="Test", xaxis_title = "Tid", yaxis_title = "Värde")

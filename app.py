@@ -46,7 +46,7 @@ app.layout = html.Div(children=[
         id='attribute-dropdown',
         options=[{'label':atr, 'value':atr} for atr in attributes],
         placeholder='Pick attributes',
-        #multi=True
+        multi=True
     ),
     html.Br(),
 
@@ -120,8 +120,10 @@ app.layout = html.Div(children=[
 
 def generateGraph(dataframes):
     '''Returns a px fig for the graph'''
-    fig = px.line({}, x = "Värde", y = "Tid")
+    print(len(dataframes))
+    fig = px.line()
     for dataframe in dataframes:
+        
         date_and_time = []
         for i in range(len(dataframe[dataframe.columns[0]])):
             date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
@@ -140,7 +142,7 @@ def generateGraph(dataframes):
 
 
 
-correctDF = CorrectifyDataframe(pd.read_csv("Nederbordsmang_noformat.csv", skiprows = 9, sep = ';'))
+#correctDF = CorrectifyDataframe(pd.read_csv("Nederbordsmang_noformat.csv", skiprows = 9, sep = ';'))
 
 
     
@@ -200,7 +202,7 @@ def update_graf(start_date, end_date, atr_values, year_value):
                 frame_nums.append(frame)
                 break
         frame += 1
-
+    print(frame_nums)
     frame_list = []
     for i in range(len(frame_nums)):
         frame_list.append(data_frames[i])

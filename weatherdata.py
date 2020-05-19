@@ -1,4 +1,4 @@
-import pandas as pd 
+import pandas as pd
 import os
 import glob
 
@@ -30,17 +30,53 @@ class weatherdata:
         else:
             return "start_date must be smaller than end_date"
 
-    def rapport(self):
-        rapport = []
+    def report(self):
         index = 0
-        for column in self.data_frame_list[-1][["Solskenstid"]]:
-            column_day += column
+        reportData = []
+        column_day = 0
+        df = self.data_frame_list[-1]
+
+        for index, row in df.iterrows():
+            column_day += int(row["Solskenstid"])
             index += 1
             if index % 24 == 0:
-                rapport.append(column_day)
-                column_day = 0
-                index = 0
+               reportData.append(column_day / (3600 * 24))
+               column_day = 0
+               index = 0
+        
+        return reportData
+    
+    def makeExcel(self):
 
+        # Calculate sunshine % for each day
+        index = 0
+        reportData = []
+        column_day = 0
+        df = self.data_frame_list[-1]
 
+        for a, row in df.iterrows():
+            column_day += int(row["Solskenstid"])
+            index += 1
+            if index % 24 == 0:
+               reportData.append(column_day / (3600 * 24))
+               column_day = 0
+               index = 0
+        
+        del df['Solskenstid']
+        del df['Tid (UTC)']
 
-            
+        clear_df = df.drop_duplicates()
+
+        clear_df["Sunshine %"] = ""
+
+        index = 0
+        for i, row in clear_df.iterrows():                
+            try:
+                row["Sunshine %"] = reportData[index]
+                index += 1
+                
+            except IndexError:
+                break    
+
+        
+        clear_df.to_excel("report.xlsx")

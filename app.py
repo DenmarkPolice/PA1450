@@ -120,7 +120,6 @@ app.layout = html.Div(children=[
 
 def generateGraph(dataframes):
     '''Returns a px fig for the graph'''
-    print(len(dataframes))
     fig = px.line()
     for dataframe in dataframes:
         
@@ -131,6 +130,7 @@ def generateGraph(dataframes):
         dictionary[dataframe.columns[0]] = date_and_time
         dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
         fig.add_scatter(dictionary)
+    fig.update_layout(title ="Test", xaxis_title = "Tid", yaxis_title = "Värde")
         
 #fig = px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
@@ -201,11 +201,12 @@ def update_graf(start_date, end_date, atr_values, year_value):
             if data_frame.columns[2] == attribute:
                 frame_nums.append(frame)
                 break
-        frame += 1
+            frame += 1
     print(frame_nums)
     frame_list = []
     for i in range(len(frame_nums)):
         frame_list.append(data_frames[i])
+
 
     fig = generateGraph(frame_list)
 

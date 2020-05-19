@@ -46,7 +46,7 @@ app.layout = html.Div(children=[
         id='attribute-dropdown',
         options=[{'label':atr, 'value':atr} for atr in attributes],
         placeholder='Pick attributes',
-        multi=True
+        #multi=True
     ),
     html.Br(),
 
@@ -118,20 +118,23 @@ app.layout = html.Div(children=[
 ])
 
 
-def generateGraph(dataframe):
+def generateGraph(dataframes):
     '''Returns a px fig for the graph'''
+    fig = px.line({}, x = 'Värde', y = 'Tid')
+    for dataframe in dataframes:
+        date_and_time = []
+        for i in range(len(dataframe[dataframe.columns[0]])):
+            date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
+        dictionary = {}
+        dictionary[dataframe.columns[0]] = date_and_time
+        dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+        fig.add_scatter(dictionary)
+        
+#fig = px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
 
-    date_and_time = []
-    for i in range(len(dataframe[dataframe.columns[0]])):
-        date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
 
-    dictionary = {}
-
-    dictionary[dataframe.columns[0]] = date_and_time
-    dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
-
-    #return go.Scatter(dictionary, x = dataframe.columns[0], y = dataframe.columns[2], mode='lines')
-    return px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2],)
+    
+    return fig
 
 #Testing function for correctly formatting csv files
 

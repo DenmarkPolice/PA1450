@@ -75,6 +75,46 @@ app.layout = html.Div(children=[
         id='scatter-chart',
         figure = fig      
     ),
+
+    dbc.Button("How to format your own csv-file", id="open"),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("How to upload your own csv-file"),
+                dbc.ModalBody('If you would like to use your own csv-file to display data it has to be formatted in the right way.'),
+                dbc.ModalBody('The format that is used on this website is as follows:'),
+                dbc.ModalBody(''),
+                dbc.ModalBody('Datum,Tid (UTC),xyz'),
+                dbc.ModalBody(''),
+                dbc.ModalBody('Where xyz stands for the attribute of the csv-file, for example temperature.'),
+                dbc.ModalBody(''),
+                dbc.ModalBody('Once you have made sure that your csv-file is formatted this way, please use the box above to upload your file.'),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close", className="ml-auto")
+                ),
+            ],
+            id="modal",
+            size="sm"
+        ),
+
+    dcc.Upload(
+        id='upload-data',
+        children=html.Div([
+            'Drag and Drop or ',
+            html.A('Select Files')
+        ]),
+        style={
+            'width': '100%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
+            'textAlign': 'center',
+            'margin': '10px'
+        },
+        # Allow multiple files to be uploaded
+        multiple=True
+    ),
 ])
 
 
@@ -158,12 +198,17 @@ def update_graf(start_date, end_date, atr_values, year_value):
                 break
         frame += 1
 
-    fig = go.Figure()
-    fig.update_layout(showlegend=True)
-    for frame in frame_nums:
-        fig.add_scatter(generateGraph(data_frames[frame]))
+    frame_list = []
+    for i in range(len(frame_nums)):
+        frame_list.append(data_frames[i])
 
-    text = "" #text is only for errors, but since it is an output we have to return something
+
+    # fig = go.Figure()
+    # fig.update_layout(showlegend=True)
+    # for frame in frame_nums:
+    #     fig.add_scatter(generateGraph(data_frames[frame]))
+
+    text = "" #text is only for errors, but since it is an output in the callback we have to return something
     return fig, text
 
 #Callback that disables the date range picker if a year is selected in the drodown menu.
@@ -183,6 +228,63 @@ def year_dropdown_set_enabled_state(start_date, end_date):
     if start_date is not None and end_date is not None:
         return True
 
+#Callback for the modal window
+@app.callback(
+    Output("modal", "is_open"),
+    [Input("open", "n_clicks"), Input("close", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+#Parses the contents of the uploaded csv file
+def parse_contents(contents, filename, date):
+    content_type, content_string = contents.split(',')
+
+    decoded = base64.b64decode(content_string)
+    try:
+        if 'csv' in filename:
+            # Assume that the user uploaded a CSV file
+            df = pd.read_csv(
+                io.StringIO(decoded.decode('utf-8')))
+    except Exception as e:
+        print(e)
+        return html.Div([
+            'There was an error processing this file.'
+        ])
+    #Assuming that this Div creates the table that is displayed
+    return html.Div([
+        html.H5(filename),
+        html.H6(dt.fromtimestamp(date)),
+
+        dash_table.DataTable(
+            data=df.to_dict('records'),
+            columns=[{'name': i, 'id': i} for i in df.columns]
+        ),
+
+        html.Hr(),  # horizontal line
+
+        # For debugging, display the raw contents provided by the web browser
+        html.Div('Raw Content'),
+        html.Pre(contents[0:200] + '...', style={
+            'whiteSpace': 'pre-wrap',
+            'wordBreak': 'break-all'
+        })
+    ])
+
+#Displays the table generated for the uploaded csv file.
+@app.callback(Output('output-data-upload', 'children'),
+              [Input('upload-data', 'contents')],
+              [State('upload-data', 'filename'),
+               State('upload-data', 'last_modified')])
+def update_output(list_of_contents, list_of_names, list_of_dates):
+    if list_of_contents is not None:
+        children = [
+            parse_contents(c, n, d) for c, n, d in
+            zip(list_of_contents, list_of_names, list_of_dates)]
+        return children
 
 if __name__ == '__main__':
     app.run_server(debug=True)

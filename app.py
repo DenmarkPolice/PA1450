@@ -120,7 +120,7 @@ app.layout = html.Div(children=[
 
 def generateGraph(dataframes):
     '''Returns a px fig for the graph'''
-    fig = px.line()
+    fig = go.Figure()
     for dataframe in dataframes:
         
         date_and_time = []
@@ -129,13 +129,12 @@ def generateGraph(dataframes):
         dictionary = {}
         dictionary[dataframe.columns[0]] = date_and_time
         dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
-        fig.add_scatter(dictionary)
+        
+        fig.add_trace(go.Scatter(x=dictionary[dataframe.columns[0]], y = dictionary[dataframe.columns[2]], mode='lines', name='Lines'))
     fig.update_layout(title ="Test", xaxis_title = "Tid", yaxis_title = "Värde")
         
-#fig = px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
-
-
-    
+    #fig = px.line(dictionary, x = dataframe.columns[0], y = dataframe.columns[2])
+   
     return fig
 
 #Testing function for correctly formatting csv files

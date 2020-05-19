@@ -120,7 +120,7 @@ app.layout = html.Div(children=[
 
 def generateGraph(dataframes):
     '''Returns a px fig for the graph'''
-    fig = px.line({}, x = 'Värde', y = 'Tid')
+    fig = px.line({}, x = "Värde", y = "Tid")
     for dataframe in dataframes:
         date_and_time = []
         for i in range(len(dataframe[dataframe.columns[0]])):
@@ -205,7 +205,8 @@ def update_graf(start_date, end_date, atr_values, year_value):
     for i in range(len(frame_nums)):
         frame_list.append(data_frames[i])
 
-    
+    fig = generateGraph(frame_list)
+
     # fig = go.Figure()
     # fig.update_layout(showlegend=True)
     # for frame in frame_nums:

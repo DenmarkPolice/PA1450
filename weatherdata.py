@@ -29,3 +29,18 @@ class weatherdata:
             return ranged_df_list
         else:
             return "start_date must be smaller than end_date"
+
+    def rapport(self):
+        rapport = []
+        index = 0
+        for column in self.data_frame_list[-1][["Solskenstid"]]:
+            column_day += column
+            index += 1
+            if index % 24 == 0:
+                rapport.append(column_day)
+                column_day = 0
+                index = 0
+
+
+
+            

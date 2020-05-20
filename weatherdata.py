@@ -14,7 +14,7 @@ class weatherdata:
         df_list = []
 
         for filename in all_files:
-            df_list.append(pd.read_csv(filename, sep = ","))            
+            df_list.append(pd.read_csv(filename, sep = ",", skiprows=9))            
 
         self.data_frame_list = df_list
 
@@ -29,22 +29,6 @@ class weatherdata:
             return ranged_df_list
         else:
             return "start_date must be smaller than end_date"
-
-    def report(self):
-        index = 0
-        reportData = []
-        column_day = 0
-        df = self.data_frame_list[-1]
-
-        for index, row in df.iterrows():
-            column_day += int(row["Solskenstid"])
-            index += 1
-            if index % 24 == 0:
-               reportData.append(column_day / (3600 * 24))
-               column_day = 0
-               index = 0
-        
-        return reportData
     
     def makeExcel(self):
 
@@ -65,12 +49,12 @@ class weatherdata:
         del df['Solskenstid']
         del df['Tid (UTC)']
 
-        clear_df = df.drop_duplicates()
+        export_df = df.drop_duplicates()
 
-        clear_df["Sunshine %"] = ""
+        export_df["Sunshine %"] = ""
 
         index = 0
-        for i, row in clear_df.iterrows():                
+        for i, row in export_df.iterrows():                
             try:
                 row["Sunshine %"] = reportData[index]
                 index += 1
@@ -78,5 +62,4 @@ class weatherdata:
             except IndexError:
                 break    
 
-        
-        clear_df.to_excel("report.xlsx")
+        export_df.to_excel("report.xlsx")

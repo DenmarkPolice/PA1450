@@ -1,18 +1,16 @@
 import dash
 import dash_core_components as dcc
-import dash_bootstrap_components as dbc
 import dash_html_components as html
 import plotly.graph_objects as go
 from datetime import datetime as dt
 from dash.dependencies import Input, Output, State
-import re
 import dash_table
 import io
 import base64
 import pandas as pd
 import os
 from weatherdata import weatherdata
-import plotly.express as px
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -85,7 +83,7 @@ def generateGraph(data_frames):
         listan = []
         if data_frame.columns[2] == 'Solskenstid':
             for i in data_frame[data_frame.columns[2]]:
-                listan.append(i/3600)
+                listan.append(i/360)
             dictionary[data_frame.columns[2]] = listan
         else:
             dictionary[data_frame.columns[2]] = data_frame[data_frame.columns[2]]

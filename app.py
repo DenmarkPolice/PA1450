@@ -13,6 +13,7 @@ import pandas as pd
 import os
 from weatherdata import weatherdata
 import plotly.express as px
+from flask import send_file
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -45,7 +46,6 @@ app.layout = html.Div(children=[
 
     #Dropdown for yearly interval
     dcc.Dropdown(id='year-dropdown',options=[{'label':x, 'value': x} for x in range(2009, 2021)], placeholder='If you want to select an entire year, please do so here'),
-    html.Div(id='year-dropdown-output'),
     html.Br(),
 
     #Pick an interval between two dates. 
@@ -58,7 +58,6 @@ app.layout = html.Div(children=[
         display_format='DD-MM-YYYY',
         clearable=True,
     ),
-    html.Div(id='output-date-range'),
     html.Br(),
 
     html.Div(id='output-data-upload'),
@@ -67,11 +66,34 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='scatter-chart',
         figure = fig      
-    )
+    ),
+    html.Br(),
+    html.Button(id='excel-button', n_clicks=0, children='Make excel'),
+    #html.A(href='download_excel', children='Download File'),
 ])
 
+@app.callback(dash.dependencies.Output('excel-button', 'style'), [dash.dependencies.Input('excel-button', 'n_clicks')])
+def make_excel(n_clicks):
+    raise dash.exceptions.PreventUpdate('Cancel callback')
+    weatherdata.makeExcel()
 
-def generateGraph(data_frames):
+#Feature coming in the future
+# @app.server.route('/dash/urlToDownload')
+# def download_excel():
+
+#     strIO = io.BytesIO()
+#     excel_writer = pd.ExcelWriter(strIO, engine="xlsxwriter")
+
+#     weatherdata.makeExcel()
+#     excel_writer.save()
+#     excel_data = strIO.getvalue()
+#     strIO.seek(0)
+
+#     return send_file(strIO, mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', attachment_filename='report.xlsx', as_attachment=True, cache_timeout=0)
+
+
+
+def generate_graph(data_frames):
     '''Returns a px fig for the graph'''
 
     fig = go.Figure()
@@ -108,10 +130,10 @@ def update_graf(start_date, end_date, atr_values, year_value):
         end_date = str(year_value) + '-12-12' #The last of December the given year
         data_frames = data.get_ranged_df(str(start_date), str(end_date))
     else:
-        #If all of the parameters are not null, we can't create a graph, so we return an empty graph and an error message. 
+        #If none of the above if statements are true we can't make a graph, return an empty graph and an error message
         return {'data': []}, "Please choose both an attribute and some form of time interval"
 
-    #Find which data frames are selected
+    #Find which data frames indexes are selected
     frame_nums = []
     for attribute in atr_values:
         frame = 0
@@ -125,7 +147,8 @@ def update_graf(start_date, end_date, atr_values, year_value):
     for i in frame_nums:
         frame_list.append(data_frames[i])
 
-    fig = generateGraph(frame_list)
+    #Generate the graph 
+    fig = generate_graph(frame_list)
 
     text = "" #text is only for errors, but since it is an output in the callback we have to return something
     return fig, text

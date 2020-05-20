@@ -74,7 +74,7 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='scatter-chart',
         figure = fig      
-    ),
+    )
 ])
 
 
@@ -100,7 +100,6 @@ def generateGraph(data_frames):
         fig.add_trace(go.Scatter(x=dictionary[data_frame.columns[0]], y = dictionary[data_frame.columns[2]], mode='lines', name= data_frame.columns[2]))
     fig.update_layout(title ="Test", xaxis_title = "Tid", yaxis_title = "Värde")
 
-   
     return fig
 
 @app.callback([dash.dependencies.Output('scatter-chart', 'figure'), dash.dependencies.Output('fig-error', 'children')], [dash.dependencies.Input('date-pick-range', 'start_date'), 
@@ -154,3 +153,6 @@ def year_dropdown_set_enabled_state(start_date, end_date):
 
     if start_date is not None and end_date is not None:
         return True
+
+if __name__ == '__main__':
+    app.run_server(debug=True)

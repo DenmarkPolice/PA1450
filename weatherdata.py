@@ -14,7 +14,7 @@ class weatherdata:
         df_list = []
 
         for filename in all_files:
-            df_list.append(pd.read_csv(filename, sep = ",", skiprows=9))            
+            df_list.append(pd.read_csv(filename, sep = ","))            
 
         self.data_frame_list = df_list
 

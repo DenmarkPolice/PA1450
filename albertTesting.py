@@ -13,6 +13,12 @@ import os
 from weatherdata import weatherdata
 import plotly.express as px
 
+def CorrectifyDataframe(dataframe):
+    newFrameDict = {dataframe.columns[0] : dataframe[dataframe.columns[0]], dataframe.columns[1] : dataframe[dataframe.columns[1]], dataframe.columns[2] : dataframe[dataframe.columns[2]]}
+    dataframe = pd.DataFrame(newFrameDict)
+    print(dataframe)
+    return dataframe
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 website = dash.Dash(__name__, external_stylesheets=external_stylesheets)

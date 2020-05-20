@@ -78,26 +78,26 @@ app.layout = html.Div(children=[
 ])
 
 
-def generateGraph(dataframes):
+def generateGraph(data_frames):
     '''Returns a px fig for the graph'''
 
     fig = go.Figure()
-    for dataframe in dataframes:
+    for data_frame in data_frames:
         
         date_and_time = []
-        for i in range(len(dataframe[dataframe.columns[0]])):
-            date_and_time.append(dataframe.iat[i,0] + " " + dataframe.iat[i,1])
+        for i in range(len(data_frame[data_frame.columns[0]])):
+            date_and_time.append(data_frame.iat[i,0] + " " + data_frame.iat[i,1])
         dictionary = {}
         dictionary[dataframe.columns[0]] = date_and_time
         listan = []
-        if dataframe.columns[2] == 'Solskenstid':
-            for i in dataframe[dataframe.columns[2]]:
+        if data_frame.columns[2] == 'Solskenstid':
+            for i in data_frame[data_frame.columns[2]]:
                 listan.append(i/3600)
             dictionary[dataframe.columns[2]] = listan
         else:
-            dictionary[dataframe.columns[2]] = dataframe[dataframe.columns[2]]
+            dictionary[dataframe.columns[2]] = data_frame[data_frame.columns[2]]
         
-        fig.add_trace(go.Scatter(x=dictionary[dataframe.columns[0]], y = dictionary[dataframe.columns[2]], mode='lines', name= dataframe.columns[2]))
+        fig.add_trace(go.Scatter(x=dictionary[data_frame.columns[0]], y = dictionary[data_frame.columns[2]], mode='lines', name= data_frame.columns[2]))
     fig.update_layout(title ="Test", xaxis_title = "Tid", yaxis_title = "Värde")
 
    

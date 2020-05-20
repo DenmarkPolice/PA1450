@@ -62,4 +62,4 @@ class weatherdata:
             except IndexError:
                 break    
 
-        return export_df
+        export_df.to_excel("report.xlsx")
